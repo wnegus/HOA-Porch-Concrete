@@ -171,7 +171,14 @@
       </div>
       <div id="voter-log" class="voter-log"></div>
       <div style="border-top:1px solid #e0ddd6;padding-top:1rem;margin-top:1rem;">
-        <button class="danger" style="width:100%;padding:0.6rem;border-radius:8px;font-size:0.875rem;font-weight:600;cursor:pointer;border:none;" onclick="confirmReset()">Reset all votes</button>
+        <div id="reset-confirm" class="hidden" style="background:#fff3f3;border:1px solid #f5c6c6;border-radius:8px;padding:0.75rem;margin-bottom:0.5rem;font-size:0.85rem;">
+          Are you sure? This cannot be undone.
+          <div style="display:flex;gap:0.5rem;margin-top:0.5rem;">
+            <button class="danger" style="flex:1;padding:0.4rem;border-radius:6px;font-size:0.85rem;font-weight:600;cursor:pointer;border:none;" onclick="doReset()">Yes, reset all</button>
+            <button style="flex:1;padding:0.4rem;border-radius:6px;font-size:0.85rem;cursor:pointer;" onclick="document.getElementById('reset-confirm').classList.add('hidden')">Cancel</button>
+          </div>
+        </div>
+        <button class="danger" style="width:100%;padding:0.6rem;border-radius:8px;font-size:0.875rem;font-weight:600;cursor:pointer;border:none;" onclick="document.getElementById('reset-confirm').classList.remove('hidden')">Reset all votes</button>
       </div>
       <div class="modal-btns" style="margin-top:8px;">
         <button onclick="closeAdmin()">Close</button>
@@ -417,10 +424,10 @@ async function removeOfflineVoter(name) {
   } catch(e) { alert('Error: '+e.message); }
 }
 
-async function confirmReset() {
-  if (!confirm('Reset ALL votes? This cannot be undone.')) return;
+async function doReset() {
   try {
     await deleteAllVotes();
+    document.getElementById('reset-confirm').classList.add('hidden');
     closeAdmin();
     picks = [];
     updateUI();
