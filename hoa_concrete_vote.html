@@ -427,13 +427,15 @@ async function removeOfflineVoter(name) {
 async function doReset() {
   try {
     await deleteAllVotes();
+    await seedKristen();
     document.getElementById('reset-confirm').classList.add('hidden');
     closeAdmin();
     picks = [];
     updateUI();
     alert('All votes have been reset.');
-  } catch(e) { alert('Error: '+e.message); }
+  } catch(e) { alert('Reset error: ' + e.message); }
 }
+
 
 // Seed Kristen's votes if not already in DB
 async function seedKristen() {
